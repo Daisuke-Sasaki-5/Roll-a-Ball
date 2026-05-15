@@ -4,6 +4,10 @@ public class PlayerFallReset : MonoBehaviour
 {
     [SerializeField] private Transform respawnPoint;
 
+    /// <summary>
+    /// プレイヤーが落下時任意の場所にリスポーンさせる
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))

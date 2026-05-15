@@ -3,11 +3,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
+    /// <summary>
+    /// プレイヤー操作全般を管理
+    /// </summary>
+
     //変数宣言
     [Header("移動速度")]
     [SerializeField] private float moveSpeed = 3.0f;
     [Header("ジャンプ力")]
-    [SerializeField] private float jumpForce = 3.0f;
+    [SerializeField] private float jumpForce = 5.0f;
 
     bool isGrounded = false;
 
