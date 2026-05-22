@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
     private bool isStarted = false; // ゲーム開始済みフラグ
-    
-    private float startTiem;
-    private float clearTime;
+
+    [SerializeField] private TMP_Text timetext;
+    private float timer;
+
+    //private float startTiem;
+    //private float clearTime;
 
     private void Awake()
     {
@@ -50,6 +53,8 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "GameScene") return;
 
         isStarted = false;
+        timer = 0f;
+        UpdateTimeUI();
 
         // プレイヤー操作禁止
         FindObjectOfType<Player>().enabled = false;
@@ -60,6 +65,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    private void UpdateTimeUI()
+    {
+        if(timetext != null)
+        {
+            timetext.text = "Time : " + timer.ToString("F1");
+        }
+    }
+
     private void Update()
     {
         // ==== エンターキーでゲームスタート ====
@@ -67,7 +80,13 @@ public class GameManager : MonoBehaviour
         {
             StartGame();
         }
-        return;
+
+        // ゲーム開始時だけ時間加算
+        if(isStarted)
+        {
+            timer += Time.deltaTime;
+            UpdateTimeUI();
+        }
     }
 
     private void StartGame()
@@ -80,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.ShowStartUI(false);
 
-        startTiem = Time.time;
+        //startTiem = Time.time;
 
         FindObjectOfType<Player>().enabled = true;
     }
@@ -88,8 +107,8 @@ public class GameManager : MonoBehaviour
     public void TryClear()
     {
         Debug.Log("クリア");
-        clearTime = Time.time - startTiem;
-        PlayerPrefs.SetFloat("ClearTime", clearTime);
+        //clearTime = timer;
+        PlayerPrefs.SetFloat("ClearTime", timer);
         FadeManager.instance.FadeToScene("ResultScene");
     }
 
