@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     private Vector2 moveInput;
     private Rigidbody rb;
 
+    private MovingPlatform currentPlatform;
+
     /// <summary>
     /// ‰Šú‰»
     /// </summary>
@@ -52,6 +54,11 @@ public class Player : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        if (currentPlatform != null)
+        {
+            rb.position += currentPlatform.DeltaPosition;
+        }
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
 
         // š “ü—Í‚ª‚ ‚é‚Æ‚«‚¾‚¯—Í‚ğ‰Á‚¦‚é
@@ -74,9 +81,25 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // ’n–Ê‚ÉÚ‚µ‚Ä‚¢‚é‚©
         if(collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+
+        // “®‚­°‚ÉÚ‚µ‚Ä‚¢‚é‚©
+        if(collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            currentPlatform = collision.gameObject.GetComponent<MovingPlatform>();
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            currentPlatform = null;
         }
     }
 

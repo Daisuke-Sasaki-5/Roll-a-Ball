@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b0970b591e22f448a1b17a5d23e1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckPoint
+  effectPrefab: {fileID: 639421485216721824, guid: ba8f357a42108d24086fb78005d40a0a, type: 3}
 --- !u!1 &6857512407461281963
 GameObject:
   m_ObjectHideFlags: 0
