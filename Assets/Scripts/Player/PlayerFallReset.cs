@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class PlayerFallReset : MonoBehaviour
 {
+    public static PlayerFallReset instance;
+
     [SerializeField] private Transform respawnPoint;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     /// <summary>
     /// プレイヤーが落下時任意の場所にリスポーンさせる
@@ -27,5 +34,11 @@ public class PlayerFallReset : MonoBehaviour
                 rb.rotation = respawnPoint.rotation;
             }
         }
+    }
+
+    // チェックポイント変更時に呼び出す関数
+    public void SetCheckPoint(Transform checkPoint)
+    {
+        respawnPoint = checkPoint;
     }
 }
