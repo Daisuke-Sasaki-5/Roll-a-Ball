@@ -33,9 +33,10 @@ public class Player : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && isGrounded == false)
+        if (context.performed && isGrounded)
         {
             Jump();
+            isGrounded = false;
         }
     }
 
@@ -52,7 +53,12 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
-        rb.AddForce(moveDirection * moveSpeed);
+
+        // ★ 入力があるときだけ力を加える
+        if (moveDirection.sqrMagnitude > 0.001f)
+        {
+            rb.AddForce(moveDirection * moveSpeed);
+        }
 
         // ==== 最大加速制限 ====
 
@@ -70,7 +76,28 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = false;
+            isGrounded = true;
         }
+    }
+
+    public void ResetMovement()
+    {
+        moveInput = Vector2.zero;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    public void Bounce(float power)
+    {
+        // 現在の速度を保持
+        Vector3 vec = rb.linearVelocity;
+
+        // Y座標だけ更新
+        vec.y = power;
+
+        rb.linearVelocity = vec;
+
+        isGrounded = false;
     }
 }

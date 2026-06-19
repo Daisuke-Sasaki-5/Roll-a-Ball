@@ -10,11 +10,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance { get; private set; }
     private bool isStarted = false; // ゲーム開始済みフラグ
 
-    [SerializeField] private TMP_Text timetext;
     private float timer;
 
-    //private float startTiem;
-    //private float clearTime;
+    // チェックポイント通過数
+    private int checkPointCount;
 
     private void Awake()
     {
@@ -54,23 +53,19 @@ public class GameManager : MonoBehaviour
 
         isStarted = false;
         timer = 0f;
-        UpdateTimeUI();
+        UIManager.Instance.UpdateTimeUI(timer);
+
+        // チェックポイントのリセット
+        checkPointCount = 0;
 
         // プレイヤー操作禁止
         FindObjectOfType<Player>().enabled = false;
 
-        UIManager.Instance.ShowStartUI(this);
+        UIManager.Instance.ShowStartUI(true);
+        UIManager.Instance.UpdateCheckPointUI(checkPointCount);
 
         // ゲーム停止中
         Time.timeScale = 0f;
-    }
-
-    private void UpdateTimeUI()
-    {
-        if(timetext != null)
-        {
-            timetext.text = "Time : " + timer.ToString("F1");
-        }
     }
 
     private void Update()
@@ -85,7 +80,7 @@ public class GameManager : MonoBehaviour
         if(isStarted)
         {
             timer += Time.deltaTime;
-            UpdateTimeUI();
+            UIManager.Instance.UpdateTimeUI(timer);
         }
     }
 
@@ -102,6 +97,13 @@ public class GameManager : MonoBehaviour
         //startTiem = Time.time;
 
         FindObjectOfType<Player>().enabled = true;
+    }
+
+    public void AddCheckPoint()
+    {
+        checkPointCount++;
+
+        UIManager.Instance.UpdateCheckPointUI(checkPointCount);
     }
 
     public void TryClear()
