@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
     {
         if (currentPlatform != null)
         {
-            rb.position += currentPlatform.DeltaPosition;
+            rb.MovePosition(rb.position + currentPlatform.DeltaPosition * 0.3f);
         }
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
@@ -86,9 +86,12 @@ public class Player : MonoBehaviour
         {
             isGrounded = true;
         }
+    }
 
+    private void OnCollisionStay(Collision collision)
+    {
         // ìÆÇ≠è∞Ç…ê⁄ÇµÇƒÇ¢ÇÈÇ©
-        if(collision.gameObject.CompareTag("MovingPlatform"))
+        if (collision.gameObject.CompareTag("MovingPlatform"))
         {
             currentPlatform = collision.gameObject.GetComponent<MovingPlatform>();
             isGrounded = true;

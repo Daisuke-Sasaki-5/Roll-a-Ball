@@ -15,6 +15,13 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 startPos;
     private Vector3 targetPos;
 
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     void Start()
     {
         startPos = transform.position;
@@ -23,13 +30,15 @@ public class MovingPlatform : MonoBehaviour
         previousPosition = transform.position;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        float t = Mathf.PingPong(Time.time *  moveSpeed, 1f);
+        float t = Mathf.PingPong(Time.time * moveSpeed, 1f);
 
-        transform.position = Vector3.Lerp(startPos,targetPos, t);
+        Vector3 nextPos = Vector3.Lerp(startPos, targetPos, t);
 
-        DeltaPosition = transform.position - previousPosition;
-        previousPosition = transform.position;
+        // ç°âÒà⁄ìÆÇ∑ÇÈó ÇåvéZ
+        DeltaPosition = nextPos - rb.position;
+        
+        rb.MovePosition(nextPos);
     }
 }
